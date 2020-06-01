@@ -1,6 +1,6 @@
 import AppError from '@shared/errors/AppError';
 import FakeBCryptHashProvider from '@modules/users/providers/PasswordHash/fakes/FakeBCryptHashProvider';
-import SignJWT from '@modules/users/providers/SignSession/modules/SignJWT';
+import SignJWT from '@modules/users/providers/SignSession/implementations/SignJWT';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 import CreateUserService from './CreateUserService';
 import CreateSessionService from './CreateSessionService';
