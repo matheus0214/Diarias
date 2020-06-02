@@ -1,6 +1,11 @@
 # Diarias
 
-**Diarias is my personal project to learn use typescript and SOLID architecture**
+**Diarias is my personal project to learn use typescript and project patterns**
+
+ - DDD: **Domin Driven Desing**
+ - TDD: **Test Driven Development** (using Jest)
+ - Dependency inversion
+ - Dependency Injection
 
 ## Project overview
 
