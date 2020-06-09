@@ -6,18 +6,18 @@ import uploadConfig from '@config/upload';
 import UsersController from '../controllers/UsersController';
 import UserUpdateAvatarController from '../controllers/UserUpdateAvatarController';
 
-const usersRouter = Router();
+const userRoutes = Router();
 const upload = multer(uploadConfig);
 const usersController = new UsersController();
 const userAvatarController = new UserUpdateAvatarController();
 
-usersRouter.post('/', usersController.create);
+userRoutes.post('/', usersController.create);
 
-usersRouter.patch(
+userRoutes.patch(
   '/avatar',
   ensureAuthenticated,
   upload.single('avatar'),
   userAvatarController.update,
 );
 
-export default usersRouter;
+export default userRoutes;

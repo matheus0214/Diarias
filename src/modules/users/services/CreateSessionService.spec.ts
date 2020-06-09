@@ -1,5 +1,5 @@
 import AppError from '@shared/errors/AppError';
-import FakeBCryptHashProvider from '@modules/users/providers/PasswordHash/fakes/FakeBCryptHashProvider';
+import FakeHashProvider from '@modules/users/providers/PasswordHash/fakes/FakeHashProvider';
 import SignJWT from '@modules/users/providers/SignSession/implementations/SignJWT';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 import CreateSessionService from './CreateSessionService';
@@ -7,16 +7,16 @@ import CreateSessionService from './CreateSessionService';
 let fakeUsersRepository: FakeUsersRepository;
 let signSession: SignJWT;
 let createSessionService: CreateSessionService;
-let fakeBCryptHashProvider: FakeBCryptHashProvider;
+let fakeHashProvider: FakeHashProvider;
 
 describe('CreateUserService', () => {
   beforeEach(() => {
     fakeUsersRepository = new FakeUsersRepository();
     signSession = new SignJWT();
-    fakeBCryptHashProvider = new FakeBCryptHashProvider();
+    fakeHashProvider = new FakeHashProvider();
     createSessionService = new CreateSessionService(
       fakeUsersRepository,
-      fakeBCryptHashProvider,
+      fakeHashProvider,
       signSession,
     );
   });

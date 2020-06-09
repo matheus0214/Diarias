@@ -1,10 +1,11 @@
 import 'reflect-metadata';
 import { injectable, inject } from 'tsyringe';
+import path from 'path';
 
 import AppError from '@shared/errors/AppError';
 import IMailProvider from '@shared/container/providers/MailProvider/model/IMailProvider';
 import IUserRepository from '@modules/users/repositories/IUsersRepository';
-import IUserTokens from '@modules/users/repositories/IUserTokens';
+import IUserTokensRepository from '@modules/users/repositories/IUserTokensRepository';
 
 @injectable()
 class SendForgotPasswordEmail {
@@ -16,7 +17,7 @@ class SendForgotPasswordEmail {
     private usersRepository: IUserRepository,
 
     @inject('UserTokens')
-    private userTokens: IUserTokens,
+    private userTokens: IUserTokensRepository,
   ) {}
 
   public async execute(email: string): Promise<void> {
@@ -26,9 +27,33 @@ class SendForgotPasswordEmail {
       throw new AppError('User does not exist');
     }
 
-    await this.userTokens.generate(user.id);
+    const token = await this.userTokens.generate(user.id);
 
-    await this.mail.sendMail(email, 'Este e um email de teste');
+    const forgotPasswordTemplate = path.resolve(
+      __dirname,
+      '..',
+      'views',
+      'forgot_password.hbs',
+    );
+
+    await this.mail.sendMail({
+      to: {
+        name: user.name,
+        email: user.email,
+      },
+      from: {
+        name: user.name,
+        email: user.email,
+      },
+      subject: 'Recuperação de senha',
+      template: {
+        file: forgotPasswordTemplate,
+        variables: {
+          name: user.name,
+          link: `http://localhost:3000/reset_password/token&=${token.token}`,
+        },
+      },
+    });
   }
 }
 

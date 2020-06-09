@@ -1,21 +1,21 @@
 import { isUuid } from 'uuidv4';
 
 import AppError from '@shared/errors/AppError';
-import FakeBCryptHashProvider from '@modules/users/providers/PasswordHash/fakes/FakeBCryptHashProvider';
+import FakeHashProvider from '@modules/users/providers/PasswordHash/fakes/FakeHashProvider';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 import CreateUserService from './CreateUserService';
 
 let fakeUsersRepository: FakeUsersRepository;
-let fakeBCryptHash: FakeBCryptHashProvider;
+let fakeHashProvider: FakeHashProvider;
 let createUserService: CreateUserService;
 
 describe('CreateUserService', () => {
   beforeEach(() => {
     fakeUsersRepository = new FakeUsersRepository();
-    fakeBCryptHash = new FakeBCryptHashProvider();
+    fakeHashProvider = new FakeHashProvider();
     createUserService = new CreateUserService(
       fakeUsersRepository,
-      fakeBCryptHash,
+      fakeHashProvider,
     );
   });
 
