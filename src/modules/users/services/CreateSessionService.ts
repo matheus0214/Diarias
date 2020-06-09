@@ -1,6 +1,7 @@
+import 'reflect-metadata';
 import { injectable, inject } from 'tsyringe';
 
-import User from '@modules/users/infra/typeorm/intities/User';
+import IUser from '@modules/users/entities/IUser';
 import AppError from '@shared/errors/AppError';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import IHash from '@modules/users/providers/PasswordHash/model/IHash';
@@ -17,8 +18,8 @@ class CreateSessionService {
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
 
-    @inject('HashPassword')
-    private hashPassword: IHash,
+    @inject('Hash')
+    private hash: IHash,
 
     @inject('SignSession')
     private signSession: ISignSession,
@@ -27,7 +28,7 @@ class CreateSessionService {
   public async execute({
     email,
     password,
-  }: IRequest): Promise<{ user: User; token: string }> {
+  }: IRequest): Promise<{ user: IUser; token: string }> {
     /** Check user exist */
     const user = await this.usersRepository.findByEmail(email);
 
@@ -36,10 +37,7 @@ class CreateSessionService {
     }
 
     /** Check password is correct */
-    const checkPassword = await this.hashPassword.compare(
-      password,
-      user.password,
-    );
+    const checkPassword = await this.hash.compare(password, user.password);
 
     if (!checkPassword) {
       throw new AppError('Combination email/password does not match');

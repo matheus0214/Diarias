@@ -1,25 +1,24 @@
 import AppError from '@shared/errors/AppError';
-import FakeBCryptHashProvider from '@modules/users/providers/PasswordHash/fakes/FakeBCryptHashProvider';
 import FakeDiskStorageProvider from '@shared/container/providers/UploadProvider/fakes/FakeDiskStorageProvider';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
-import CreateUserService from './CreateUserService';
 import UserUpdateAvatarService from './UserUpdateAvatarService';
 
+let fakeUsersRepository: FakeUsersRepository;
+let fakeUploadProvider: FakeDiskStorageProvider;
+let userUpdateAvatarService: UserUpdateAvatarService;
+
 describe('CreateUserService', () => {
-  it('should be able to upload avatar', async () => {
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeBCryptHash = new FakeBCryptHashProvider();
-    const createUserService = new CreateUserService(
-      fakeUsersRepository,
-      fakeBCryptHash,
-    );
-    const fakeUploadProvider = new FakeDiskStorageProvider();
-    const userUpdateAvatarService = new UserUpdateAvatarService(
+  beforeEach(() => {
+    fakeUsersRepository = new FakeUsersRepository();
+    fakeUploadProvider = new FakeDiskStorageProvider();
+    userUpdateAvatarService = new UserUpdateAvatarService(
       fakeUsersRepository,
       fakeUploadProvider,
     );
+  });
 
-    const user = await createUserService.execute({
+  it('should be able to upload avatar', async () => {
+    const user = await fakeUsersRepository.create({
       email: 'mathesugiga123@gmail.com',
       name: 'Matheus',
       password: '1234',
@@ -34,15 +33,7 @@ describe('CreateUserService', () => {
   });
 
   it('should not be able update avatar', async () => {
-    const fakeUsersRepository = new FakeUsersRepository();
-
-    const fakeUploadProvider = new FakeDiskStorageProvider();
-    const userUpdateAvatarService = new UserUpdateAvatarService(
-      fakeUsersRepository,
-      fakeUploadProvider,
-    );
-
-    expect(
+    await expect(
       userUpdateAvatarService.execute({
         id: 'does not exist',
         filename: 'avatar.png',
@@ -51,19 +42,7 @@ describe('CreateUserService', () => {
   });
 
   it('should be able to delete old avatar', async () => {
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeBCryptHash = new FakeBCryptHashProvider();
-    const createUserService = new CreateUserService(
-      fakeUsersRepository,
-      fakeBCryptHash,
-    );
-    const fakeUploadProvider = new FakeDiskStorageProvider();
-    const userUpdateAvatarService = new UserUpdateAvatarService(
-      fakeUsersRepository,
-      fakeUploadProvider,
-    );
-
-    const user = await createUserService.execute({
+    const user = await fakeUsersRepository.create({
       email: 'mathesugiga123@gmail.com',
       name: 'Matheus',
       password: '1234',

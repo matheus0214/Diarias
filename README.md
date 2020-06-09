@@ -5,7 +5,7 @@
  - DDD: **Domin Driven Desing**
  - TDD: **Test Driven Development** (using Jest)
  - Dependency inversion
- - Dependency Injection
+ - Dependency injection
 
 ## Project overview
 

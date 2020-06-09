@@ -2,25 +2,27 @@ import AppError from '@shared/errors/AppError';
 import FakeBCryptHashProvider from '@modules/users/providers/PasswordHash/fakes/FakeBCryptHashProvider';
 import SignJWT from '@modules/users/providers/SignSession/implementations/SignJWT';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
-import CreateUserService from './CreateUserService';
 import CreateSessionService from './CreateSessionService';
 
+let fakeUsersRepository: FakeUsersRepository;
+let signSession: SignJWT;
+let createSessionService: CreateSessionService;
+let fakeBCryptHashProvider: FakeBCryptHashProvider;
+
 describe('CreateUserService', () => {
-  it('should be able to create a new session', async () => {
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeBCryptHash = new FakeBCryptHashProvider();
-    const createUserService = new CreateUserService(
+  beforeEach(() => {
+    fakeUsersRepository = new FakeUsersRepository();
+    signSession = new SignJWT();
+    fakeBCryptHashProvider = new FakeBCryptHashProvider();
+    createSessionService = new CreateSessionService(
       fakeUsersRepository,
-      fakeBCryptHash,
-    );
-    const signSession = new SignJWT();
-    const createSessionService = new CreateSessionService(
-      fakeUsersRepository,
-      fakeBCryptHash,
+      fakeBCryptHashProvider,
       signSession,
     );
+  });
 
-    const user = await createUserService.execute({
+  it('should be able to create a new session', async () => {
+    const user = await fakeUsersRepository.create({
       email: 'mathesugiga123@gmail.com',
       name: 'Matheus',
       password: '1234',
@@ -36,20 +38,7 @@ describe('CreateUserService', () => {
   });
 
   it('should not be able to create a new session, wrong email', async () => {
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeBCryptHash = new FakeBCryptHashProvider();
-    const createUserService = new CreateUserService(
-      fakeUsersRepository,
-      fakeBCryptHash,
-    );
-    const signSession = new SignJWT();
-    const createSessionService = new CreateSessionService(
-      fakeUsersRepository,
-      fakeBCryptHash,
-      signSession,
-    );
-
-    await createUserService.execute({
+    await fakeUsersRepository.create({
       email: 'mathesugiga123@gmail.com',
       name: 'Matheus',
       password: '1234',
@@ -66,20 +55,7 @@ describe('CreateUserService', () => {
   });
 
   it('should not be able to create a new session, wrong password', async () => {
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeBCryptHash = new FakeBCryptHashProvider();
-    const createUserService = new CreateUserService(
-      fakeUsersRepository,
-      fakeBCryptHash,
-    );
-    const signSession = new SignJWT();
-    const createSessionService = new CreateSessionService(
-      fakeUsersRepository,
-      fakeBCryptHash,
-      signSession,
-    );
-
-    await createUserService.execute({
+    await fakeUsersRepository.create({
       email: 'mathesugiga123@gmail.com',
       name: 'Matheus',
       password: '1234',

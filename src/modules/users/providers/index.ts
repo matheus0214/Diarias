@@ -6,6 +6,6 @@ import BCryptHashProvider from './PasswordHash/implementations/BCryptHashProvide
 import ISignSession from './SignSession/model/ISignSession';
 import SignJWT from './SignSession/implementations/SignJWT';
 
-container.registerSingleton<IHash>('HashPassword', BCryptHashProvider);
+container.registerSingleton<IHash>('Hash', BCryptHashProvider);
 
 container.registerSingleton<ISignSession>('SignSession', SignJWT);

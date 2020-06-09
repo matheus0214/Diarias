@@ -1,6 +1,7 @@
+import 'reflect-metadata';
 import { injectable, inject } from 'tsyringe';
 
-import User from '@modules/users/infra/typeorm/intities/User';
+import IUser from '@modules/users/entities/IUser';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import AppError from '@shared/errors/AppError';
 import IUploadProvider from '@shared/container/providers/UploadProvider/model/IUploadProvider';
@@ -20,7 +21,7 @@ class UserUpdateAvatarService {
     private upload: IUploadProvider,
   ) {}
 
-  async execute({ id, filename }: IRequest): Promise<User> {
+  async execute({ id, filename }: IRequest): Promise<IUser> {
     /** Check user is a valid user */
     const user = await this.usersRepository.findByID(id);
 
